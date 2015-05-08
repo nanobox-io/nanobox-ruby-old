@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+plugin=$(cat /tmp/plugin)
+if [ -x ../plugins/${plugin}/bin/build ]
+then
+	../plugins/${plugin}/bin/build
+else
+	exit 1
+fi

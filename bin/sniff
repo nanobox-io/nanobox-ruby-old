@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+for i in $(ls ../plugins)
+do
+	if [ ! $i = "base" ]
+	then
+		if [ -x ../plugins/$i/bin/sniff ]
+		then
+			../plugins/$i/bin/sniff
+			if [ $? -eq 0 ]
+			then
+				echo $i > /tmp/plugin
+				exit 0
+			fi
+		fi
+	fi
+done
+
+../plugins/base/bin/sniff
+if [ $? -eq 0 ]
+then
+	echo base > /tmp/plugin
+	exit 0
+else
+	exit 1
+fi

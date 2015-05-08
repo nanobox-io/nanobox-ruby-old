@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+plugin=$(cat /tmp/plugin)
+if [ -x ../plugins/${plugin}/bin/prepare ]
+then
+	../plugins/${plugin}/bin/prepare
+fi
