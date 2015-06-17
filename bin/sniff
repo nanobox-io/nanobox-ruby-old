@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# TODO: if plugin is specified, jump to that one first
+
 for i in $(ls ../plugins)
 do
 	if [ ! $i = "base" ]

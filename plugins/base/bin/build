@@ -1,44 +1,47 @@
 #!/usr/bin/env bash
-# -*- mode: bash; tab-width: 4; indent-tabs-mode: 1 -*-
-# vim: ts=8 sw=8 ft=bash noet
-
-# setting payload json into variables
-eval $(echo $1 | shon | sed -e "s/^/PAYLOAD_/")
-
-# setting boxfile json into variables
-eval $(echo $PAYLOAD_boxfile | shon | sed -e "s/^/BOXFILE_/")
-
-# make sure things are installed
-/data/bin/pkgin -y in ruby${BOXFILE_build_ruby_version} ruby${BOXFILE_build_ruby_version}-bundler
+# -*- mode: bash; tab-width: 4; -*-
+# vim: ts=4 sw=8 ft=bash noet
 
 run_hooks() {
-    exec_type="BOXFILE_${1}_exec_type"
-    if [ -n ${!exec_type} ]
+    exec_type="BOXFILE_${1}_type"
+    if [ -n "${!exec_type}" ]
     then
-        if [ ${!exec_type} = "string" ]
+        if [ "${!exec_type}" = "string" ]
         then
-        	cmd=BOXFILE_${1}_exec_value
-            echo "executing string ${!cmd}"
-            # $(cd $PAYLOAD_code_dir; ${!cmd})
-        elif [ ${!exec_type} = "array" ]
+            cmd="BOXFILE_${1}_value"
+            echo "executing ${1} \"${!cmd}\""
+            $(cd $PAYLOAD_code_dir_value; ${!cmd})
+        elif [ "${!exec_type}" = "array" ]
         then
-            for index in $(seq $BOXFILE_${1}_exec_length)
+            index_max="BOXFILE_${1}_length"
+            for index in $(seq 0 ${!index_max})
             do
-            	cmd_type="BOXFILE_${1}_exec_${index}_type"
-                if [ "${!cmd_type}" = "string"]
+                cmd_type="BOXFILE_${1}_${index}_type"
+                if [ "${!cmd_type}" = "string" ]
                 then
-                	cmd="BOXFILE_${1}_exec_${index}_value"
-                	echo "executing array string ${!cmd}"
-                	# $(cd $PAYLOAD_code_dir; ${!cmd})
+                    cmd="BOXFILE_${1}_${index}_value"
+                    echo "executing ${1} ${index} \"${!cmd}\""
+                    $(cd $PAYLOAD_code_dir_value; ${!cmd})
                 fi
             done
         fi
     fi
 }
 
+# setting payload json into variables
+eval $(echo $1 | shon | sed -e "s/^/PAYLOAD_/")
+
+# setting boxfile json into variables
+eval $(echo $PAYLOAD_boxfile_value | shon | sed -e "s/^/BOXFILE_/")
+
+# make sure things are installed
+/data/bin/pkgin -y in ruby${BOXFILE_build_ruby_version} ruby${BOXFILE_build_ruby_version}-bundler
+
+# copy code to /data/code
+
 # run before exec hooks
-run_hooks "before_exec"
+run_hooks "build_before_exec"
 # run exec hooks
-run_hooks "exec"
+run_hooks "build_exec"
 # run after exec hooks
-run_hooks "after_exec"
+run_hooks "build_after_exec"

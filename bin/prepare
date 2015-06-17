@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# set up pkgsrc repository and update pkgsrc
+
 plugin=$(cat /tmp/plugin)
 if [ -x ../plugins/${plugin}/bin/prepare ]
 then
