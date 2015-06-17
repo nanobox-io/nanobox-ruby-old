@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+echo "build:"
+echo "  exec: bundle install --deployment"
+echo "  lib_dir: vendor"
+echo "  reuse_libs: true"
+echo "  ruby_version: 2.2"
+echo "web1:"
+echo "  name: site"
+echo "  type: ruby"
+echo "  exec: if [ -f app.rb ]; then ruby app.rb; else echo \"[\`date +\"%T\"\`] ERROR\! No exec command provided\"; fi"

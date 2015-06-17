@@ -6,7 +6,7 @@ do
 	then
 		if [ -x ../plugins/$i/bin/sniff ]
 		then
-			../plugins/$i/bin/sniff
+			../plugins/$i/bin/sniff $@
 			if [ $? -eq 0 ]
 			then
 				echo $i > /tmp/plugin
@@ -16,7 +16,7 @@ do
 	fi
 done
 
-../plugins/base/bin/sniff
+../plugins/base/bin/sniff $@
 if [ $? -eq 0 ]
 then
 	echo base > /tmp/plugin

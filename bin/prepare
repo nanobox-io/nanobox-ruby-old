@@ -3,5 +3,5 @@
 plugin=$(cat /tmp/plugin)
 if [ -x ../plugins/${plugin}/bin/prepare ]
 then
-	../plugins/${plugin}/bin/prepare
+	../plugins/${plugin}/bin/prepare $@
 fi
